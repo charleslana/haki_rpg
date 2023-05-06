@@ -1,0 +1,1 @@
+const String luffyV2Idle = "assets/images/characters/luffy_v2_idle.png";
