@@ -1,11 +1,13 @@
 import 'dart:async';
 
+import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:haki_rpg/data/character_data.dart';
 import 'package:haki_rpg/flame/components/battle_background_component.dart';
 import 'package:haki_rpg/flame/components/character_component.dart';
 import 'package:haki_rpg/flame/components/character_position_component.dart';
+import 'package:haki_rpg/flame/components/skill_component.dart';
 
 import '../data/character_position_data.dart';
 
@@ -52,83 +54,95 @@ class BattleGame extends FlameGame {
     _character5 = CharacterComponent(character: luffy);
     _character6 = CharacterComponent(character: luffy);
 
-    _enemy1 = CharacterComponent(character: buggy, isFLip: true);
-    _enemy2 = CharacterComponent(character: buggy, isFLip: true);
-    _enemy3 = CharacterComponent(character: buggy, isFLip: true);
-    _enemy4 = CharacterComponent(character: buggy, isFLip: true);
-    _enemy5 = CharacterComponent(character: buggy, isFLip: true);
-    _enemy6 = CharacterComponent(character: buggy, isFLip: true);
+    _enemy1 = CharacterComponent(character: buggy, isFlip: true);
+    _enemy2 = CharacterComponent(character: buggy, isFlip: true);
+    _enemy3 = CharacterComponent(character: buggy, isFlip: true);
+    _enemy4 = CharacterComponent(character: buggy, isFlip: true);
+    _enemy5 = CharacterComponent(character: buggy, isFlip: true);
+    _enemy6 = CharacterComponent(character: buggy, isFlip: true);
 
     _characterPosition1 = CharacterPositionComponent(
       character: _character1,
       positionX: positionAllyX1,
       positionY: positionAllyY1,
+      priorityCharacter: 1,
     );
 
     _characterPosition2 = CharacterPositionComponent(
       character: _character2,
       positionX: positionAllyX2,
       positionY: positionAllyY2,
+      priorityCharacter: 2,
     );
 
     _characterPosition3 = CharacterPositionComponent(
       character: _character3,
       positionX: positionAllyX3,
       positionY: positionAllyY3,
+      priorityCharacter: 3,
     );
 
     _characterPosition4 = CharacterPositionComponent(
       character: _character4,
       positionX: positionAllyX4,
       positionY: positionAllyY4,
+      priorityCharacter: 4,
     );
 
     _characterPosition5 = CharacterPositionComponent(
       character: _character5,
       positionX: positionAllyX5,
       positionY: positionAllyY5,
+      priorityCharacter: 5,
     );
 
     _characterPosition6 = CharacterPositionComponent(
       character: _character6,
       positionX: positionAllyX6,
       positionY: positionAllyY6,
+      priorityCharacter: 6,
     );
 
     _enemyPosition1 = CharacterPositionComponent(
       character: _enemy1,
       positionX: positionEnemyX1,
       positionY: positionEnemyY1,
+      priorityCharacter: 1,
     );
 
     _enemyPosition2 = CharacterPositionComponent(
       character: _enemy2,
       positionX: positionEnemyX2,
       positionY: positionEnemyY2,
+      priorityCharacter: 2,
     );
 
     _enemyPosition3 = CharacterPositionComponent(
       character: _enemy3,
       positionX: positionEnemyX3,
       positionY: positionEnemyY3,
+      priorityCharacter: 3,
     );
 
     _enemyPosition4 = CharacterPositionComponent(
       character: _enemy4,
       positionX: positionEnemyX4,
       positionY: positionEnemyY4,
+      priorityCharacter: 4,
     );
 
     _enemyPosition5 = CharacterPositionComponent(
       character: _enemy5,
       positionX: positionEnemyX5,
       positionY: positionEnemyY5,
+      priorityCharacter: 5,
     );
 
     _enemyPosition6 = CharacterPositionComponent(
       character: _enemy6,
       positionX: positionEnemyX6,
       positionY: positionEnemyY6,
+      priorityCharacter: 6,
     );
 
     await add(_characterPosition1);
@@ -144,6 +158,37 @@ class BattleGame extends FlameGame {
     await add(_enemyPosition4);
     await add(_enemyPosition5);
     await add(_enemyPosition6);
+
+    await add(SkillComponent());
     return super.onLoad();
+  }
+
+  Future<void> moveCharacter() async {
+    final characterPosition = _characterPosition4;
+    final enemyPosition = _enemyPosition5;
+    characterPosition.changePriority(7);
+    await characterPosition.add(
+      MoveToEffect(
+        Vector2(enemyPosition.getStartingPosition().x - enemyPosition.positionX,
+            enemyPosition.getStartingPosition().y),
+        EffectController(duration: 0.5),
+      )..onComplete = () async {
+          Future.delayed(const Duration(milliseconds: 400), () async {
+            moveStartingPosition(characterPosition);
+          });
+        },
+    );
+  }
+
+  Future<void> moveStartingPosition(
+      CharacterPositionComponent characterPosition) async {
+    await characterPosition.add(
+      MoveToEffect(
+        characterPosition.getStartingPosition(),
+        EffectController(duration: 0.5),
+      )..onComplete = () async {
+          characterPosition.changePriority(characterPosition.priorityCharacter);
+        },
+    );
   }
 }
