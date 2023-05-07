@@ -10,3 +10,11 @@ final luffy = CharacterModel(
   amount: 3,
   stepTime: 0.3,
 );
+
+final buggy = CharacterModel(
+  image: buggyIdle,
+  scale: 0.288,
+  size: Vector2(44, 58),
+  amount: 4,
+  stepTime: 0.2,
+);

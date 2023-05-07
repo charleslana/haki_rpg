@@ -3,11 +3,14 @@ import 'package:flame/components.dart';
 import 'package:haki_rpg/flame/battle_game.dart';
 import 'package:haki_rpg/flame/models/character_model.dart';
 
-class CharacterComponent extends SpriteAnimationComponent with HasGameRef<BattleGame> {
+class CharacterComponent extends SpriteAnimationComponent
+    with HasGameRef<BattleGame> {
   final CharacterModel character;
+  final bool isFLip;
 
   CharacterComponent({
     required this.character,
+    this.isFLip = false,
   });
 
   @override
@@ -36,7 +39,10 @@ class CharacterComponent extends SpriteAnimationComponent with HasGameRef<Battle
     scale = spriteScale;
 
     // flipHorizontally();
-    // flipHorizontallyAroundCenter();
+    if (isFLip) {
+      flipHorizontallyAroundCenter();
+    }
+
     await add(spriteAnimationComponent);
     return super.onLoad();
   }
