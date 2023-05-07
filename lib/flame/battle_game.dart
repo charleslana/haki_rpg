@@ -40,11 +40,20 @@ class BattleGame extends FlameGame {
   late CharacterPositionComponent _enemyPosition5;
   late CharacterPositionComponent _enemyPosition6;
 
+  double moveForwardDuration = 0.5 - 0.0;
+  double moveBackDuration = 0.5 - 0.0;
+  int moveWaitDuration = 400 - 0;
+  late int moveLoopDuration;
+
   @override
   Color backgroundColor() => Colors.white;
 
   @override
   FutureOr<void> onLoad() async {
+    moveLoopDuration = (moveForwardDuration * 1000).toInt() +
+        (moveBackDuration * 1000).toInt() +
+        moveWaitDuration;
+
     await add(BattleBackgroundComponent());
 
     _character1 = CharacterComponent(character: luffy);
@@ -163,29 +172,53 @@ class BattleGame extends FlameGame {
     return super.onLoad();
   }
 
-  Future<void> moveCharacter() async {
-    final characterPosition = _characterPosition4;
-    final enemyPosition = _enemyPosition5;
+  Future<void> runAllCharacters() async {
+    final list = [1, 2, 3, 4, 5];
+    await Future.forEach(list, (i) async {
+      switch (i) {
+        case 1:
+          await _moveCharacter(_characterPosition1, _enemyPosition6);
+          break;
+        case 2:
+          await Future.delayed(Duration(milliseconds: moveLoopDuration),
+              () async {
+            await _moveCharacter(_characterPosition2, _enemyPosition6);
+          });
+          break;
+        case 3:
+          await Future.delayed(Duration(milliseconds: moveLoopDuration),
+              () async {
+            await _moveCharacter(_characterPosition3, _enemyPosition6);
+          });
+          break;
+      }
+    });
+  }
+
+  Future<void> _moveCharacter(CharacterPositionComponent source,
+      CharacterPositionComponent target) async {
+    final characterPosition = source;
+    final enemyPosition = target;
     characterPosition.changePriority(7);
     await characterPosition.add(
       MoveToEffect(
-        Vector2(enemyPosition.getStartingPosition().x - enemyPosition.positionX,
-            enemyPosition.getStartingPosition().y),
-        EffectController(duration: 0.5),
+        enemyPosition.getStartingPosition(),
+        EffectController(duration: moveForwardDuration),
       )..onComplete = () async {
-          Future.delayed(const Duration(milliseconds: 400), () async {
-            moveStartingPosition(characterPosition);
+          await Future.delayed(Duration(milliseconds: moveWaitDuration),
+              () async {
+            await _moveStartingPosition(characterPosition);
           });
         },
     );
   }
 
-  Future<void> moveStartingPosition(
+  Future<void> _moveStartingPosition(
       CharacterPositionComponent characterPosition) async {
     await characterPosition.add(
       MoveToEffect(
         characterPosition.getStartingPosition(),
-        EffectController(duration: 0.5),
+        EffectController(duration: moveBackDuration),
       )..onComplete = () async {
           characterPosition.changePriority(characterPosition.priorityCharacter);
         },

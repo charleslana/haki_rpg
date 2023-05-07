@@ -15,7 +15,7 @@ class CharacterComponent extends SpriteAnimationComponent
 
   @override
   Future<void>? onLoad() async {
-    debugMode = false;
+    debugMode = true;
 
     SpriteAnimationComponent spriteAnimationComponent =
         SpriteAnimationComponent();
@@ -33,13 +33,16 @@ class CharacterComponent extends SpriteAnimationComponent
     );
     spriteAnimationComponent =
         SpriteAnimationComponent.fromFrameData(spriteSheet, spriteAnimationData)
-          ..size = spriteSize
-          ..scale = spriteScale;
+          ..size = spriteSize;
+          // ..scale = spriteScale;
 
     size = spriteSize;
     scale = spriteScale;
 
+    anchor = Anchor.bottomLeft;
+
     if (isFlip) {
+      anchor = Anchor.bottomRight;
       flipHorizontally();
     }
 

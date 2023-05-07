@@ -22,7 +22,9 @@ class CharacterPositionComponent extends PositionComponent
   Future<void> onLoad() async {
     debugMode = true;
 
-    size = character.size;
+    size = Vector2.all(gameRef.size.y * 20 / 100);
+
+    // scale = Vector2.all(gameRef.size.y * 0.25 / 100);
 
     priority = priorityCharacter;
 

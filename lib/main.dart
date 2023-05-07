@@ -1,8 +1,18 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:haki_rpg/flame/battle_game.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await SystemChrome.setPreferredOrientations([
+    DeviceOrientation.landscapeLeft,
+    DeviceOrientation.landscapeRight,
+  ]);
+  SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+    systemNavigationBarColor: Colors.black,
+    statusBarColor: Colors.black,
+  ));
   runApp(const MyApp());
 }
 
@@ -27,6 +37,13 @@ class MyHomePage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GameWidget<BattleGame>(game: BattleGame());
+    return GameWidget<BattleGame>(
+      game: BattleGame(),
+      loadingBuilder: (context) => const Material(
+        child: Center(
+          child: CircularProgressIndicator(),
+        ),
+      ),
+    );
   }
 }

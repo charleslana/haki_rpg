@@ -47,7 +47,7 @@ class SkillComponent extends PositionComponent
 
   @override
   void onTapUp(TapUpEvent event) {
-    gameRef.moveCharacter();
+    gameRef.runAllCharacters();
     super.onTapUp(event);
   }
 }
