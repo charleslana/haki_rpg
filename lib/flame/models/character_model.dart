@@ -4,11 +4,13 @@ class CharacterModel {
   final double scale;
   final SpriteModel idle;
   final SpriteModel run;
+  final SpriteModel hit;
 
   const CharacterModel({
     required this.scale,
     required this.idle,
     required this.run,
+    required this.hit,
   });
 }
 
@@ -19,6 +21,7 @@ class SpriteModel {
   final double stepTime;
   final int? amountPerRow;
   final bool loop;
+  final double time;
 
   const SpriteModel({
     required this.image,
@@ -27,5 +30,6 @@ class SpriteModel {
     required this.stepTime,
     this.amountPerRow,
     this.loop = true,
+    required this.time,
   });
 }

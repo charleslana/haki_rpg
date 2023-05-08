@@ -1,5 +1,7 @@
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
+import 'package:flame/effects.dart';
+import 'package:flutter/material.dart';
 import 'package:haki_rpg/flame/battle_game.dart';
 import 'package:haki_rpg/flame/models/character_model.dart';
 
@@ -18,11 +20,11 @@ class CharacterComponent extends SpriteAnimationComponent
 
   @override
   Future<void>? onLoad() async {
-    debugMode = true;
+    debugMode = false;
 
     await setIdleAnimation();
 
-    scale = Vector2.all(gameRef.size.y * character.scale / 100);
+    scale = Vector2.all(gameRef.size.y * character.scale / 80);
 
     anchor = Anchor.bottomLeft;
 
@@ -81,5 +83,49 @@ class CharacterComponent extends SpriteAnimationComponent
       ..size = spriteSize;
 
     size = spriteSize;
+  }
+
+  Future<void> setHitAnimation() async {
+    final spriteSheet = await Images(prefix: "").load(
+      character.hit.image,
+    );
+    final spriteSize = character.hit.size;
+
+    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
+      amount: character.hit.amount,
+      stepTime: character.hit.stepTime,
+      textureSize: spriteSize,
+      amountPerRow: character.hit.amountPerRow,
+      loop: true,
+    );
+
+    final spriteAnimation = SpriteAnimationComponent.fromFrameData(
+        spriteSheet, spriteAnimationData);
+
+    _spriteAnimationComponent
+      ..animation = spriteAnimation.animation
+      ..size = spriteSize;
+
+    size = spriteSize;
+  }
+
+  int getWaitHit() {
+    return (character.hit.time * 1000).toInt();
+  }
+
+  Future<void> setDamageColor() async {
+    await _spriteAnimationComponent.add(
+      ColorEffect(
+        Colors.white,
+        const Offset(
+          0,
+          1,
+        ),
+        EffectController(
+          duration: 0.1,
+          reverseDuration: 0.1,
+        ),
+      ),
+    );
   }
 }

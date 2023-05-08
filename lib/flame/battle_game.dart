@@ -43,7 +43,7 @@ class BattleGame extends FlameGame {
 
   double moveForwardDuration = 0.5 - 0.0;
   double moveBackDuration = 0.5 - 0.0;
-  int moveWaitDuration = 400 - 0;
+  int moveWaitDuration = 0;
   late int moveLoopDuration;
 
   @override
@@ -51,9 +51,7 @@ class BattleGame extends FlameGame {
 
   @override
   FutureOr<void> onLoad() async {
-    moveLoopDuration = (moveForwardDuration * 1000).toInt() +
-        (moveBackDuration * 1000).toInt() +
-        moveWaitDuration;
+    setMoveLoopDuration();
 
     await add(BattleBackgroundComponent());
 
@@ -173,23 +171,36 @@ class BattleGame extends FlameGame {
     return super.onLoad();
   }
 
+  void setMoveLoopDuration() {
+    moveLoopDuration = (moveForwardDuration * 1000).toInt() +
+        (moveBackDuration * 1000).toInt() +
+        moveWaitDuration;
+  }
+
   Future<void> runAllCharacters() async {
     final list = [1, 2, 3, 4, 5];
+    int loopDuration = 0;
     await Future.forEach(list, (i) async {
       switch (i) {
         case 1:
           await _moveCharacter(_enemyPosition6, _characterPosition1);
           break;
         case 2:
-          await Future.delayed(Duration(milliseconds: moveLoopDuration),
+          final characterPosition = _characterPosition2;
+          loopDuration =
+              moveLoopDuration + _enemyPosition6.character.getWaitHit();
+          await Future.delayed(Duration(milliseconds: loopDuration),
               () async {
-            await _moveCharacter(_characterPosition2, _enemyPosition6);
+            await _moveCharacter(characterPosition, _enemyPosition6);
           });
           break;
         case 3:
-          await Future.delayed(Duration(milliseconds: moveLoopDuration),
+          final characterPosition = _characterPosition3;
+          loopDuration =
+              moveLoopDuration + characterPosition.character.getWaitHit();
+          await Future.delayed(Duration(milliseconds: loopDuration),
               () async {
-            await _moveCharacter(_characterPosition3, _enemyPosition6);
+            await _moveCharacter(characterPosition, _enemyPosition6);
           });
           break;
       }
@@ -207,8 +218,13 @@ class BattleGame extends FlameGame {
         enemyPosition.getStartingPosition(),
         EffectController(duration: moveForwardDuration),
       )..onComplete = () async {
-          await Future.delayed(Duration(milliseconds: moveWaitDuration),
-              () async {
+          await characterPosition.character.setHitAnimation();
+          await enemyPosition.character.setDamageColor();
+          await Future.delayed(
+              Duration(
+                  milliseconds:
+                      characterPosition.character.getWaitHit() - moveWaitDuration), () async {
+            await characterPosition.character.setRunningAnimation();
             await _moveStartingPosition(characterPosition);
           });
         },
@@ -237,6 +253,7 @@ class BattleGame extends FlameGame {
           }
           characterPosition.character.flipHorizontally();
           await characterPosition.character.setIdleAnimation();
+          setMoveLoopDuration();
         },
     );
   }

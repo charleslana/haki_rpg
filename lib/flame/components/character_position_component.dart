@@ -20,7 +20,7 @@ class CharacterPositionComponent extends PositionComponent
 
   @override
   Future<void> onLoad() async {
-    debugMode = true;
+    debugMode = false;
 
     size = Vector2.all(gameRef.size.y * 20 / 100);
 
