@@ -13,31 +13,16 @@ class CharacterComponent extends SpriteAnimationComponent
     this.isFlip = false,
   });
 
+  final SpriteAnimationComponent _spriteAnimationComponent =
+      SpriteAnimationComponent();
+
   @override
   Future<void>? onLoad() async {
     debugMode = true;
 
-    SpriteAnimationComponent spriteAnimationComponent =
-        SpriteAnimationComponent();
-    final spriteSheet = await Images(prefix: "").load(
-      character.image,
-    );
-    final spriteScale = Vector2.all(gameRef.size.y * character.scale / 100);
-    final spriteSize = character.size;
+    await setIdleAnimation();
 
-    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
-      amount: character.amount,
-      stepTime: character.stepTime,
-      textureSize: spriteSize,
-      amountPerRow: character.amountPerRow,
-    );
-    spriteAnimationComponent =
-        SpriteAnimationComponent.fromFrameData(spriteSheet, spriteAnimationData)
-          ..size = spriteSize;
-          // ..scale = spriteScale;
-
-    size = spriteSize;
-    scale = spriteScale;
+    scale = Vector2.all(gameRef.size.y * character.scale / 100);
 
     anchor = Anchor.bottomLeft;
 
@@ -46,7 +31,55 @@ class CharacterComponent extends SpriteAnimationComponent
       flipHorizontally();
     }
 
-    await add(spriteAnimationComponent);
+    await add(_spriteAnimationComponent);
     return super.onLoad();
+  }
+
+  Future<void> setIdleAnimation() async {
+    final spriteSheet = await Images(prefix: "").load(
+      character.idle.image,
+    );
+
+    final spriteSize = character.idle.size;
+
+    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
+      amount: character.idle.amount,
+      stepTime: character.idle.stepTime,
+      textureSize: spriteSize,
+      amountPerRow: character.idle.amountPerRow,
+    );
+
+    final spriteAnimation = SpriteAnimationComponent.fromFrameData(
+        spriteSheet, spriteAnimationData);
+
+    _spriteAnimationComponent
+      ..animation = spriteAnimation.animation
+      ..size = spriteSize;
+
+    size = spriteSize;
+  }
+
+  Future<void> setRunningAnimation() async {
+    final spriteSheet = await Images(prefix: "").load(
+      character.run.image,
+    );
+    final spriteSize = character.run.size;
+
+    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
+      amount: character.run.amount,
+      stepTime: character.run.stepTime,
+      textureSize: spriteSize,
+      amountPerRow: character.run.amountPerRow,
+      loop: true,
+    );
+
+    final spriteAnimation = SpriteAnimationComponent.fromFrameData(
+        spriteSheet, spriteAnimationData);
+
+    _spriteAnimationComponent
+      ..animation = spriteAnimation.animation
+      ..size = spriteSize;
+
+    size = spriteSize;
   }
 }

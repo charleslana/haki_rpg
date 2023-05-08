@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flame/effects.dart';
 import 'package:flame/game.dart';
+import 'package:flame/widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:haki_rpg/data/character_data.dart';
 import 'package:haki_rpg/flame/components/battle_background_component.dart';
@@ -177,7 +178,7 @@ class BattleGame extends FlameGame {
     await Future.forEach(list, (i) async {
       switch (i) {
         case 1:
-          await _moveCharacter(_characterPosition1, _enemyPosition6);
+          await _moveCharacter(_enemyPosition6, _characterPosition1);
           break;
         case 2:
           await Future.delayed(Duration(milliseconds: moveLoopDuration),
@@ -200,6 +201,7 @@ class BattleGame extends FlameGame {
     final characterPosition = source;
     final enemyPosition = target;
     characterPosition.changePriority(7);
+    await characterPosition.character.setRunningAnimation();
     await characterPosition.add(
       MoveToEffect(
         enemyPosition.getStartingPosition(),
@@ -215,12 +217,26 @@ class BattleGame extends FlameGame {
 
   Future<void> _moveStartingPosition(
       CharacterPositionComponent characterPosition) async {
+    Anchor anchor = characterPosition.character.anchor;
+    if (anchor == Anchor.bottomLeft) {
+      anchor = Anchor.bottomRight;
+    } else {
+      anchor = Anchor.bottomLeft;
+    }
+    characterPosition.character.flipHorizontally();
     await characterPosition.add(
       MoveToEffect(
         characterPosition.getStartingPosition(),
         EffectController(duration: moveBackDuration),
       )..onComplete = () async {
           characterPosition.changePriority(characterPosition.priorityCharacter);
+          if (anchor == Anchor.bottomLeft) {
+            anchor = Anchor.bottomRight;
+          } else {
+            anchor = Anchor.bottomLeft;
+          }
+          characterPosition.character.flipHorizontally();
+          await characterPosition.character.setIdleAnimation();
         },
     );
   }
