@@ -19,7 +19,6 @@ final luffy = CharacterModel(
     amount: 8,
     stepTime: 0.1,
     time: 0.5,
-    loop: false,
   ),
   hit: SpriteModel(
     image: luffyV2Hit1,
@@ -28,6 +27,14 @@ final luffy = CharacterModel(
     stepTime: 0.1,
     amountPerRow: 1,
     time: 1.3,
+    loop: false,
+  ),
+  defense: SpriteModel(
+    image: luffyV2Defense,
+    size: Vector2(51, 48),
+    amount: 1,
+    stepTime: 0.5,
+    time: 0,
     loop: false,
   ),
 );
@@ -47,7 +54,6 @@ final buggy = CharacterModel(
     amount: 8,
     stepTime: 0.1,
     time: 0.5,
-    loop: false,
   ),
   hit: SpriteModel(
     image: buggyHit1,
@@ -55,6 +61,14 @@ final buggy = CharacterModel(
     amount: 8,
     stepTime: 0.1,
     time: 0.8,
+    loop: false,
+  ),
+  defense: SpriteModel(
+    image: buggyDefense,
+    size: Vector2(76, 73),
+    amount: 2,
+    stepTime: 0.5,
+    time: 0,
     loop: false,
   ),
 );

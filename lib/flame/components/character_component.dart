@@ -72,7 +72,6 @@ class CharacterComponent extends SpriteAnimationComponent
       stepTime: character.run.stepTime,
       textureSize: spriteSize,
       amountPerRow: character.run.amountPerRow,
-      loop: true,
     );
 
     final spriteAnimation = SpriteAnimationComponent.fromFrameData(
@@ -96,7 +95,7 @@ class CharacterComponent extends SpriteAnimationComponent
       stepTime: character.hit.stepTime,
       textureSize: spriteSize,
       amountPerRow: character.hit.amountPerRow,
-      loop: true,
+      loop: character.hit.loop,
     );
 
     final spriteAnimation = SpriteAnimationComponent.fromFrameData(
@@ -127,5 +126,29 @@ class CharacterComponent extends SpriteAnimationComponent
         ),
       ),
     );
+  }
+
+  Future<void> setDefenseAnimation() async {
+    final spriteSheet = await Images(prefix: "").load(
+      character.defense.image,
+    );
+    final spriteSize = character.defense.size;
+
+    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
+      amount: character.defense.amount,
+      stepTime: character.defense.stepTime,
+      textureSize: spriteSize,
+      amountPerRow: character.defense.amountPerRow,
+      loop: character.defense.loop,
+    );
+
+    final spriteAnimation = SpriteAnimationComponent.fromFrameData(
+        spriteSheet, spriteAnimationData);
+
+    _spriteAnimationComponent
+      ..animation = spriteAnimation.animation
+      ..size = spriteSize;
+
+    size = spriteSize;
   }
 }

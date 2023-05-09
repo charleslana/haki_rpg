@@ -189,8 +189,7 @@ class BattleGame extends FlameGame {
           final characterPosition = _characterPosition2;
           loopDuration =
               moveLoopDuration + _enemyPosition6.character.getWaitHit();
-          await Future.delayed(Duration(milliseconds: loopDuration),
-              () async {
+          await Future.delayed(Duration(milliseconds: loopDuration), () async {
             await _moveCharacter(characterPosition, _enemyPosition6);
           });
           break;
@@ -198,8 +197,7 @@ class BattleGame extends FlameGame {
           final characterPosition = _characterPosition3;
           loopDuration =
               moveLoopDuration + characterPosition.character.getWaitHit();
-          await Future.delayed(Duration(milliseconds: loopDuration),
-              () async {
+          await Future.delayed(Duration(milliseconds: loopDuration), () async {
             await _moveCharacter(characterPosition, _enemyPosition6);
           });
           break;
@@ -219,11 +217,13 @@ class BattleGame extends FlameGame {
         EffectController(duration: moveForwardDuration),
       )..onComplete = () async {
           await characterPosition.character.setHitAnimation();
+          await enemyPosition.character.setDefenseAnimation();
           await enemyPosition.character.setDamageColor();
           await Future.delayed(
               Duration(
-                  milliseconds:
-                      characterPosition.character.getWaitHit() - moveWaitDuration), () async {
+                  milliseconds: characterPosition.character.getWaitHit() -
+                      moveWaitDuration), () async {
+            await enemyPosition.character.setIdleAnimation();
             await characterPosition.character.setRunningAnimation();
             await _moveStartingPosition(characterPosition);
           });

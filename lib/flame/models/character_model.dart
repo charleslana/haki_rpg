@@ -5,12 +5,14 @@ class CharacterModel {
   final SpriteModel idle;
   final SpriteModel run;
   final SpriteModel hit;
+  final SpriteModel defense;
 
   const CharacterModel({
     required this.scale,
     required this.idle,
     required this.run,
     required this.hit,
+    required this.defense,
   });
 }
 
