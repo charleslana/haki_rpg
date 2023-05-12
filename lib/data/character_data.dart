@@ -37,6 +37,14 @@ final luffy = CharacterModel(
     time: 0,
     loop: false,
   ),
+  death: SpriteModel(
+    image: luffyV2Death,
+    size: Vector2(69, 27),
+    amount: 1,
+    stepTime: 0.5,
+    time: 0,
+    loop: false,
+  ),
 );
 
 final buggy = CharacterModel(
@@ -67,6 +75,14 @@ final buggy = CharacterModel(
     image: buggyDefense,
     size: Vector2(76, 73),
     amount: 2,
+    stepTime: 0.5,
+    time: 0,
+    loop: false,
+  ),
+  death: SpriteModel(
+    image: buggyDeath,
+    size: Vector2(63, 40),
+    amount: 1,
     stepTime: 0.5,
     time: 0,
     loop: false,

@@ -178,6 +178,7 @@ class BattleGame extends FlameGame {
   }
 
   Future<void> runAllCharacters() async {
+    _enemyPosition6.character.resetOpacity();
     final list = [1, 2, 3, 4, 5];
     int loopDuration = 0;
     await Future.forEach(list, (i) async {
@@ -201,12 +202,21 @@ class BattleGame extends FlameGame {
             await _moveCharacter(characterPosition, _enemyPosition6);
           });
           break;
+        case 4:
+          final characterPosition = _characterPosition4;
+          loopDuration =
+              moveLoopDuration + characterPosition.character.getWaitHit();
+          await Future.delayed(Duration(milliseconds: loopDuration), () async {
+            await _moveCharacter(characterPosition, _enemyPosition6, true);
+          });
+          break;
       }
     });
   }
 
-  Future<void> _moveCharacter(CharacterPositionComponent source,
-      CharacterPositionComponent target) async {
+  Future<void> _moveCharacter(
+      CharacterPositionComponent source, CharacterPositionComponent target,
+      [bool death = false]) async {
     final characterPosition = source;
     final enemyPosition = target;
     characterPosition.changePriority(7);
@@ -223,7 +233,11 @@ class BattleGame extends FlameGame {
               Duration(
                   milliseconds: characterPosition.character.getWaitHit() -
                       moveWaitDuration), () async {
-            await enemyPosition.character.setIdleAnimation();
+            if (death) {
+              await enemyPosition.character.setDeathAnimation();
+            } else {
+              await enemyPosition.character.setIdleAnimation();
+            }
             await characterPosition.character.setRunningAnimation();
             await _moveStartingPosition(characterPosition);
           });

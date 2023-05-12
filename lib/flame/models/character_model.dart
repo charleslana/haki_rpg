@@ -6,6 +6,7 @@ class CharacterModel {
   final SpriteModel run;
   final SpriteModel hit;
   final SpriteModel defense;
+  final SpriteModel death;
 
   const CharacterModel({
     required this.scale,
@@ -13,6 +14,7 @@ class CharacterModel {
     required this.run,
     required this.hit,
     required this.defense,
+    required this.death,
   });
 }
 

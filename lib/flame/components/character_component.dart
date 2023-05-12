@@ -151,4 +151,46 @@ class CharacterComponent extends SpriteAnimationComponent
 
     size = spriteSize;
   }
+
+  Future<void> setDeathAnimation() async {
+    final spriteSheet = await Images(prefix: "").load(
+      character.death.image,
+    );
+    final spriteSize = character.death.size;
+
+    SpriteAnimationData spriteAnimationData = SpriteAnimationData.sequenced(
+      amount: character.death.amount,
+      stepTime: character.death.stepTime,
+      textureSize: spriteSize,
+      amountPerRow: character.death.amountPerRow,
+      loop: character.death.loop,
+    );
+
+    final spriteAnimation = SpriteAnimationComponent.fromFrameData(
+        spriteSheet, spriteAnimationData);
+
+    _spriteAnimationComponent
+      ..animation = spriteAnimation.animation
+      ..size = spriteSize;
+
+    size = spriteSize;
+
+    _setDeathOpacity();
+  }
+
+  Future<void> _setDeathOpacity() async {
+    await _spriteAnimationComponent.add(
+      OpacityEffect.fadeOut(
+        EffectController(duration: 0.75),
+      ),
+    );
+  }
+
+  Future<void> resetOpacity() async {
+    await _spriteAnimationComponent.add(
+      OpacityEffect.fadeIn(
+        EffectController(duration: 0),
+      ),
+    );
+  }
 }
