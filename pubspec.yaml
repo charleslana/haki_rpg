@@ -27,6 +27,7 @@ flutter:
     - assets/images/characters/
     - assets/images/stages/
     - assets/images/bars/
+    - assets/images/battle/
 
   fonts:
     - family: DIN

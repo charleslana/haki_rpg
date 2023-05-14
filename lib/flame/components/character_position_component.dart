@@ -3,6 +3,7 @@ import 'package:haki_rpg/flame/battle_game.dart';
 import 'package:haki_rpg/flame/components/character_component.dart';
 import 'package:haki_rpg/flame/components/damage_component.dart';
 import 'package:haki_rpg/flame/components/empty_hp_bar_component.dart';
+import 'package:haki_rpg/flame/components/shadow_component.dart';
 
 class CharacterPositionComponent extends PositionComponent
     with HasGameRef<BattleGame> {
@@ -20,6 +21,7 @@ class CharacterPositionComponent extends PositionComponent
 
   late EmptyHpBarComponent emptyHpBarComponent;
   late DamageComponent damageComponent;
+  late ShadowComponent shadowComponent;
 
   late Vector2 _starterPosition;
 
@@ -38,6 +40,12 @@ class CharacterPositionComponent extends PositionComponent
 
     _starterPosition = initPosition;
 
+    shadowComponent = ShadowComponent(
+      characterPositionSize: size,
+      characterScale: character.character.scale,
+    );
+    await add(shadowComponent);
+
     await add(character);
 
     emptyHpBarComponent = EmptyHpBarComponent(characterPositionSize: size);
@@ -55,5 +63,15 @@ class CharacterPositionComponent extends PositionComponent
 
   Vector2 getStartingPosition() {
     return _starterPosition;
+  }
+
+  Future<void> hideAll() async {
+    await emptyHpBarComponent.hide();
+    await shadowComponent.hide();
+  }
+
+  Future<void> showAll() async {
+    await emptyHpBarComponent.show();
+    await shadowComponent.show();
   }
 }

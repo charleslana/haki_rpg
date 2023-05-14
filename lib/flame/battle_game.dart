@@ -220,7 +220,7 @@ class BattleGame extends FlameGame {
     final characterPosition = source;
     final enemyPosition = target;
     characterPosition.changePriority(7);
-    await characterPosition.emptyHpBarComponent.hide();
+    await characterPosition.hideAll();
     await characterPosition.character.setRunningAnimation();
     await characterPosition.add(
       MoveToEffect(
@@ -238,6 +238,7 @@ class BattleGame extends FlameGame {
             await enemyPosition.damageComponent.show(145025);
             if (death) {
               await enemyPosition.character.setDeathAnimation();
+              await enemyPosition.hideAll();
             } else {
               await enemyPosition.character.setIdleAnimation();
             }
@@ -270,7 +271,7 @@ class BattleGame extends FlameGame {
           }
           characterPosition.character.flipHorizontally();
           await characterPosition.character.setIdleAnimation();
-          await characterPosition.emptyHpBarComponent.show();
+          await characterPosition.showAll();
           setMoveLoopDuration();
         },
     );
