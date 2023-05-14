@@ -27,7 +27,7 @@ class EmptyRageBarComponent extends PositionComponent {
     scale = Vector2.all(characterPositionSize.x * 0.7 / 100);
 
     position =
-        Vector2(0, characterPositionSize.y - characterPositionSize.y * 2.14);
+        Vector2(0, characterPositionSize.y - characterPositionSize.y * 2.149);
 
     priority = 1;
 
