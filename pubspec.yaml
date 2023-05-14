@@ -12,6 +12,7 @@ dependencies:
 
   cupertino_icons: ^1.0.2
   flame: ^1.7.3
+  intl: ^0.18.1
 
 dev_dependencies:
   flutter_test:
@@ -25,3 +26,9 @@ flutter:
   assets:
     - assets/images/characters/
     - assets/images/stages/
+    - assets/images/bars/
+
+  fonts:
+    - family: DIN
+      fonts:
+        - asset: assets/fonts/DIN-Alternate-Bold.ttf
