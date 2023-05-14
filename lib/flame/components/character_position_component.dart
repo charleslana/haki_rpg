@@ -3,6 +3,7 @@ import 'package:haki_rpg/flame/battle_game.dart';
 import 'package:haki_rpg/flame/components/character_component.dart';
 import 'package:haki_rpg/flame/components/damage_component.dart';
 import 'package:haki_rpg/flame/components/empty_hp_bar_component.dart';
+import 'package:haki_rpg/flame/components/empty_rage_bar_component.dart';
 import 'package:haki_rpg/flame/components/shadow_component.dart';
 
 class CharacterPositionComponent extends PositionComponent
@@ -20,6 +21,7 @@ class CharacterPositionComponent extends PositionComponent
   });
 
   late EmptyHpBarComponent emptyHpBarComponent;
+  late EmptyRageBarComponent emptyRageBarComponent;
   late DamageComponent damageComponent;
   late ShadowComponent shadowComponent;
 
@@ -51,6 +53,9 @@ class CharacterPositionComponent extends PositionComponent
     emptyHpBarComponent = EmptyHpBarComponent(characterPositionSize: size);
     await add(emptyHpBarComponent);
 
+    emptyRageBarComponent = EmptyRageBarComponent(characterPositionSize: size);
+    await add(emptyRageBarComponent);
+
     damageComponent = DamageComponent(characterPositionSize: size);
     await add(damageComponent);
 
@@ -68,10 +73,12 @@ class CharacterPositionComponent extends PositionComponent
   Future<void> hideAll() async {
     await emptyHpBarComponent.hide();
     await shadowComponent.hide();
+    await emptyRageBarComponent.hide();
   }
 
   Future<void> showAll() async {
     await emptyHpBarComponent.show();
     await shadowComponent.show();
+    await emptyRageBarComponent.show();
   }
 }

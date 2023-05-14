@@ -234,7 +234,7 @@ class BattleGame extends FlameGame {
               Duration(
                   milliseconds: characterPosition.character.getWaitHit() -
                       moveWaitDuration), () async {
-            enemyPosition.emptyHpBarComponent.changeHp(25);
+            enemyPosition.emptyHpBarComponent.changeSize(25);
             await enemyPosition.damageComponent.show(145025);
             if (death) {
               await enemyPosition.character.setDeathAnimation();
@@ -272,6 +272,7 @@ class BattleGame extends FlameGame {
           characterPosition.character.flipHorizontally();
           await characterPosition.character.setIdleAnimation();
           await characterPosition.showAll();
+          characterPosition.emptyRageBarComponent.changeSize(50);
           setMoveLoopDuration();
         },
     );

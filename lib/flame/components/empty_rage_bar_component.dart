@@ -1,48 +1,48 @@
 import 'package:flame/cache.dart';
 import 'package:flame/components.dart';
 import 'package:flame/effects.dart';
-import 'package:haki_rpg/flame/components/hp_bar_component.dart';
+import 'package:haki_rpg/flame/components/rage_bar_component.dart';
 
 import '../../data/image_data.dart';
 
-class EmptyHpBarComponent extends PositionComponent {
+class EmptyRageBarComponent extends PositionComponent {
   final Vector2 characterPositionSize;
 
-  EmptyHpBarComponent({
+  EmptyRageBarComponent({
     required this.characterPositionSize,
   });
 
   SpriteComponent _spriteComponent = SpriteComponent();
-  final _hpBarComponent = HpBarComponent();
+  final _rageBarComponent = RageBarComponent();
 
   @override
   Future<void> onLoad() async {
     _spriteComponent = SpriteComponent()
       ..sprite = await Sprite.load(
-        hpBgBar,
+        rageBgBar,
         images: Images(prefix: ""),
       )
-      ..size = Vector2(86, 8);
+      ..size = Vector2(80, 8);
 
     scale = Vector2.all(characterPositionSize.x * 0.7 / 100);
 
     position =
-        Vector2(0, characterPositionSize.y - characterPositionSize.y * 2.20);
+        Vector2(0, characterPositionSize.y - characterPositionSize.y * 2.14);
 
     priority = 1;
 
-    await _spriteComponent.add(_hpBarComponent);
+    await _spriteComponent.add(_rageBarComponent);
 
     await add(_spriteComponent);
     return super.onLoad();
   }
 
   void changeSize(int value) {
-    _hpBarComponent.changeSize(value);
+    _rageBarComponent.changeSize(value);
   }
 
   Future<void> hide() async {
-    await _hpBarComponent.hide();
+    await _rageBarComponent.hide();
     await _spriteComponent.add(
       OpacityEffect.fadeOut(
         EffectController(duration: 0),
@@ -51,7 +51,7 @@ class EmptyHpBarComponent extends PositionComponent {
   }
 
   Future<void> show() async {
-    await _hpBarComponent.show();
+    await _rageBarComponent.show();
     await _spriteComponent.add(
       OpacityEffect.fadeIn(
         EffectController(duration: 0),
